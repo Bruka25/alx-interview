@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""MOdule for calculating minimum operations"""
+"""Module for calculating minimum operations"""
 
 
 def minOperations(n):
