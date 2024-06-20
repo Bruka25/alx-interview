@@ -3,6 +3,8 @@
 
 """Module for log parsing"""
 
+import re
+
 
 def extract_input(input_line):
     '''Extracts sections of a line of an HTTP request log.
