@@ -4,6 +4,8 @@
    total
 """
 
+from collections import deque
+
 
 def makeChange(coins, total):
     """
@@ -21,14 +23,20 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    # Initialize an array to store the minimum coins needed for each amount
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    # Use BFS to find the minimum number of coins
+    queue = deque([(0, 0)])  # (current_amount, number_of_coins)
+    visited = set()
 
-    # Iterate through each amount up to the total
-    for amount in range(1, total + 1):
+    while queue:
+        current_amount, number_of_coins = queue.popleft()
+
         for coin in coins:
-            if coin <= amount:
-                dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+            next_amount = current_amount + coin
 
-    return dp[total] if dp[total] != float('inf') else -1
+            if next_amount == total:
+                return number_of_coins + 1
+            if next_amount < total and next_amount not in visited:
+                visited.add(next_amount)
+                queue.append((next_amount, number_of_coins + 1))
+
+    return -1
