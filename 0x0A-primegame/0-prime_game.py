@@ -19,66 +19,29 @@ def isWinner(x, nums):
         str: The name of the player that won the most rounds, or None if
              there is a tie.
     """
+    Ben = 0
+    Maria = 0
 
-    def is_prime(num):
-        """
-        Checks if a given number is prime.
-
-        Args:
-            num (int): The number to check.
-
-        Returns:
-            bool: True if the number is prime, otherwise False.
-        """
-        if num <= 1:
-            return False
-        if num <= 3:
-            return True
-        if num % 2 == 0 or num % 3 == 0:
-            return False
-        i = 5
-        while i * i <= num:
-            if num % i == 0 or num % (i + 2) == 0:
-                return False
-            i += 6
-        return True
-
-    def sieve(n):
-        """
-        Uses the Sieve of Eratosthenes to find all prime numbers up to n.
-
-        Args:
-            n (int): The upper limit for finding primes.
-
-        Returns:
-            list: A list of all prime numbers up to and including n.
-        """
-        primes = [True] * (n + 1)
-        p = 2
-        while p * p <= n:
-            if primes[p]:
-                for i in range(p * p, n + 1, p):
-                    primes[i] = False
-            p += 1
-        return [p for p in range(2, n + 1) if primes[p]]
-
-    maria_wins = 0
-    ben_wins = 0
-
-    for n in nums:
-        if n == 1:
-            ben_wins += 1
-            continue
-
-        primes = sieve(n)
-        if len(primes) % 2 == 0:
-            ben_wins += 1
+    for round in range(x):
+        playing_numbers = [num for num in range(2, nums[round] + 1)]
+        index = 0
+        # Sieve prime numbers per round
+        while (index < len(playing_numbers)):
+            current_prime = playing_numbers[index]
+            sieve_index = index + current_prime
+            while(sieve_index < len(playing_numbers)):
+                playing_numbers.pop(sieve_index)
+                sieve_index += current_prime - 1
+            index += 1
+        # Determine winner - if number of primes is even player 1 wins
+        # else player 2 wins. Player 2  also wins if there is only one
+        # number to pick from
+        prime_count = (len(playing_numbers))
+        if prime_count and prime_count % 2:
+            Maria += 1
         else:
-            maria_wins += 1
+            Ben += 1
 
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+    if Ben == Maria:
         return None
+    return 'Ben' if Ben > Maria else 'Maria'
