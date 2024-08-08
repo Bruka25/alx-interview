@@ -5,6 +5,7 @@ a game where Maria and Ben take turns picking prime numbers and removing
 them and their multiples from a set of consecutive integers.
 """
 
+
 def isWinner(x, nums):
     """
     Determines the winner of multiple rounds of the prime number game.
@@ -18,7 +19,7 @@ def isWinner(x, nums):
         str: The name of the player that won the most rounds, or None if
              there is a tie.
     """
-    
+
     def is_prime(num):
         """
         Checks if a given number is prime.
