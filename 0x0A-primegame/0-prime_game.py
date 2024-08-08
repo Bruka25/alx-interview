@@ -19,29 +19,23 @@ def isWinner(x, nums):
         str: The name of the player that won the most rounds, or None if
              there is a tie.
     """
-    Ben = 0
-    Maria = 0
-
-    for round in range(x):
-        playing_numbers = [num for num in range(2, nums[round] + 1)]
-        index = 0
-        # Sieve prime numbers per round
-        while (index < len(playing_numbers)):
-            current_prime = playing_numbers[index]
-            sieve_index = index + current_prime
-            while(sieve_index < len(playing_numbers)):
-                playing_numbers.pop(sieve_index)
-                sieve_index += current_prime - 1
-            index += 1
-        # Determine winner - if number of primes is even player 1 wins
-        # else player 2 wins. Player 2  also wins if there is only one
-        # number to pick from
-        prime_count = (len(playing_numbers))
-        if prime_count and prime_count % 2:
-            Maria += 1
-        else:
-            Ben += 1
-
-    if Ben == Maria:
+    if x < 1 or not nums:
         return None
-    return 'Ben' if Ben > Maria else 'Maria'
+    marias_wins, bens_wins = 0, 0
+    # generate primes with a limit of the maximum number in nums
+    n = max(nums)
+    primes = [True for _ in range(1, n + 1, 1)]
+    primes[0] = False
+    for i, is_prime in enumerate(primes, 1):
+        if i == 1 or not is_prime:
+            continue
+        for j in range(i + i, n + 1, i):
+            primes[j - 1] = False
+    # filter the number of primes less than n in nums for each round
+    for _, n in zip(range(x), nums):
+        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        bens_wins += primes_count % 2 == 0
+        marias_wins += primes_count % 2 == 1
+    if marias_wins == bens_wins:
+        return None
+    return 'Maria' if marias_wins > bens_wins else 'Ben'
